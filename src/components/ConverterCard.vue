@@ -129,7 +129,7 @@ const calculateConversion = async () => {
 const getFlagUrl = (currencyCode) => {
   if (!currencyCode) return ''
   const prefix = currencyCode.substring(0, 2).toLowerCase()
-  return new URL(`../assets/images/flags/${prefix}.webp`, import.meta.url).href
+  return `/images/flags/${prefix}.webp`
 }
 
 onMounted(async () => {

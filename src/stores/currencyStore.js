@@ -4,6 +4,8 @@ import { ref } from 'vue'
 export const useCurrencyStore = defineStore('currency', () => {
   const baseCurrency = ref('USD')
   const targetCurrency = ref('EUR')
+  const sendAmount = ref(1000) // Pastikan ini ada
+  const activeTab = ref('HISTORY') // State untuk tab aktif
 
   // Logika swap disentralisasi di sini agar konsisten
   function swapCurrencies() {
@@ -12,5 +14,5 @@ export const useCurrencyStore = defineStore('currency', () => {
     targetCurrency.value = temp
   }
 
-  return { baseCurrency, targetCurrency, swapCurrencies }
+  return { baseCurrency, targetCurrency, sendAmount, activeTab, swapCurrencies }
 })

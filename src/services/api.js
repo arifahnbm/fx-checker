@@ -1,5 +1,3 @@
-// src/services/api.js
-
 // Base URL Frankfurter API
 const BASE_URL = '/api'; // Menggunakan proxy Vite untuk menghindari masalah CORS
 

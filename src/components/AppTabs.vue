@@ -2,10 +2,12 @@
   <div class="tabs-container mb-4">
     <ul class="nav d-flex gap-4 border-bottom border-secondary" style="--bs-border-opacity: .3;">
       <li class="nav-item">
-        <a href="#" class="nav-link active px-0 py-3">HISTORY</a>
+        <a href="#" @click.prevent="store.activeTab = 'HISTORY'" 
+           :class="['nav-link', { 'active': store.activeTab === 'HISTORY' }]">HISTORY</a>
       </li>
       <li class="nav-item">
-        <a href="#" class="nav-link px-0 py-3">COMPARE</a>
+        <a href="#" @click.prevent="store.activeTab = 'COMPARE'" 
+           :class="['nav-link', { 'active': store.activeTab === 'COMPARE' }]">COMPARE</a>
       </li>
       <li class="nav-item">
         <a href="#" class="nav-link px-0 py-3 d-flex align-items-center gap-2">
@@ -48,3 +50,8 @@
   font-weight: 700;
 }
 </style>
+
+<script setup>
+import { useCurrencyStore } from '../stores/currencyStore'
+const store = useCurrencyStore()
+</script>

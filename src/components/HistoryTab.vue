@@ -77,7 +77,7 @@
         </div>
         
         <!-- Label Rentang Waktu (Bisa dibuat dinamis agar lebih keren) -->
-        <span class="stat-label">{{ formattedDateRange }}</span>
+        <span class="stat-label fs-6">{{ chartInfoText }}</span>
         
       </div>
       
@@ -107,7 +107,7 @@ const stats = ref({ open: 0, last: 0, change: 0, changePct: 0 })
 const series = ref([])
 const activeRange = ref('1M')
 const ranges = ['1D', '1W', '1M', '3M', '1Y', '5Y']
-const formattedDateRange = ref('')
+const chartInfoText = ref('')
 
 const chartOptions = ref({
   chart: { toolbar: { show: false }, background: 'transparent' },
@@ -145,8 +145,6 @@ const fetchHistory = async (range = '1M') => {
     const startStr = new Date(startDate).toLocaleDateString('en-GB', dateConfig)
     const endStr = new Date(endDate).toLocaleDateString('en-GB', dateConfig)
     
-    // Jika range 1D, tampilkan saja "13 Jul 2026 - 14 Jul 2026" atau cukup 1 tanggal
-    formattedDateRange.value = `${startStr} - ${endStr}`
     // -------------------------------------------------------------------------
 
     const data = await getHistoryRates(baseCurrency.value, targetCurrency.value, startDate, endDate)
@@ -169,6 +167,28 @@ const fetchHistory = async (range = '1M') => {
       change: change.toFixed(4),
       changePct: changePct.toFixed(2)
     }
+
+    // --- KODE BARU: Membentuk format "0.8530 · MAY 14 16:00 CET" ---
+    
+    // Ambil tanggal terakhir dari array dates API (contoh format: "2026-05-14")
+    const lastDateStr = dates[dates.length - 1]
+    const dateObj = new Date(lastDateStr)
+    
+    // Ubah bulan jadi teks pendek Bahasa Inggris (Jan, Feb, May) lalu jadikan HURUF BESAR (MAY)
+    const month = dateObj.toLocaleDateString('en-US', { month: 'short' }).toUpperCase()
+    // Ambil tanggal
+    const day = dateObj.getDate()
+    // Ambil rate terakhir, format dengan 4 angka desimal
+    const lastRateStr = last.toFixed(4)
+    
+    // (Opsional) Jika API-mu tidak mengirimkan jam, kita asumsikan penutupan pasar jam 16:00 CET
+    // Jika kamu ingin jamnya mengikuti waktu user (current time), ubah '16:00 CET' jadi dinamis
+    const timeZoneStr = '16:00 CET' 
+    
+    // Gabungkan semuanya menggunakan simbol titik tengah (·)
+    chartInfoText.value = `${lastRateStr} · ${month} ${day} ${timeZoneStr}`
+
+
   } catch (error) {
     console.error("Gagal memproses data history:", error)
   } finally {
