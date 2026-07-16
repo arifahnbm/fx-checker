@@ -79,7 +79,7 @@
 
             {{ store.isFavorite(store.baseCurrency, store.targetCurrency) ? 'FAVORITED' : 'FAVORITE' }}
           </button>
-          <button class="btn btn-outline fw-bold px-4 py-2" style="outline: 1px solid #CEF739; ">
+          <button @click="handleLog" class="btn btn-outline fw-bold px-4 py-2" style="outline: 1px solid #CEF739; ">
             LOG CONVERSION
           </button>
         </div>
@@ -153,6 +153,16 @@ onMounted(async () => {
 watch([sendAmount, baseCurrency, targetCurrency], () => {
   calculateConversion()
 })
+
+const handleLog = () => {
+  store.addLog(
+    baseCurrency.value, 
+    targetCurrency.value, 
+    sendAmount.value, 
+    receiveAmount.value
+  );
+  alert("Conversion saved to Log!");
+}
 </script>
 
 

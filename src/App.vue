@@ -21,6 +21,7 @@
       <HistoryTab v-if="store.activeTab === 'HISTORY'" />
       <CompareTab v-else-if="store.activeTab === 'COMPARE'" />
       <FavoritesTab v-else-if="store.activeTab === 'FAVORITES'" />
+      <LogTab v-else-if="store.activeTab === 'LOG'" />
       
     </div>
   </div>
@@ -36,4 +37,5 @@ import TabNavigation from './components/TabNavigation.vue'
 import HistoryTab from './components/HistoryTab.vue'
 import CompareTab from './components/CompareTab.vue'
 import FavoritesTab from './components/FavoritesTab.vue'
+import LogTab from './components/LogTab.vue'
 </script>

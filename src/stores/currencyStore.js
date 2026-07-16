@@ -8,6 +8,7 @@ export const useCurrencyStore = defineStore('currency', () => {
   const activeTab = ref('HISTORY') // State untuk tab aktif
 
   const favorites = ref([])
+  const conversionLogs = ref([])
   const getPairKey = (base, target) => `${base}-${target}`
 
   function toggleFavorite(base, target) {
@@ -31,5 +32,24 @@ export const useCurrencyStore = defineStore('currency', () => {
     targetCurrency.value = temp
   }
 
-  return { baseCurrency, targetCurrency, sendAmount, activeTab, swapCurrencies, favorites, toggleFavorite, isFavorite }
+  function addLog(base, target, amount, result) {
+  conversionLogs.value.unshift({
+    id: Date.now(),
+    base,
+    target,
+    amount,
+    result,
+    date: new Date() // Menyimpan objek tanggal
+  })
+}
+
+function clearLogs() {
+  conversionLogs.value = []
+}
+
+function removeLog(id) {
+  conversionLogs.value = conversionLogs.value.filter(log => log.id !== id)
+}
+
+  return { baseCurrency, targetCurrency, sendAmount, activeTab, swapCurrencies, favorites, toggleFavorite, isFavorite, conversionLogs, addLog, clearLogs, removeLog }
 })

@@ -20,7 +20,7 @@
       <li class="nav-item">
         <a href="#" @click.prevent="store.activeTab = 'LOG'"
            :class="['nav-link d-flex align-items-center gap-2', { 'active': store.activeTab === 'LOG' }]">
-           LOG <span class="badge-lime">8</span>
+           LOG <span class="badge-lime">{{ store.conversionLogs.length }}</span>
         </a>
       </li>
     </ul>
@@ -40,7 +40,7 @@
             {{ store.favorites.length }}
           </span>
           <span v-if="store.activeTab === 'LOG'" class="badge-lime">
-            8
+            {{ store.conversionLogs.length }}
           </span>
         </span>
 
@@ -60,7 +60,7 @@
           FAVORITES <span class="badge-lime">{{ store.favorites.length }}</span>
         </div>
         <div class="menu-item d-flex justify-content-between align-items-center" @click="selectTab('LOG')">
-          LOG <span class="badge-lime">8</span>
+          LOG <span class="badge-lime">{{ store.conversionLogs.length }}</span>
         </div>
       </div>
     </div>
