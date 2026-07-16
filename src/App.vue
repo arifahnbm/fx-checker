@@ -14,8 +14,8 @@
       <!-- Panggil ConverterCard di sini -->
       <ConverterCard />
       
-      <!-- Panggil AppTabs di sini -->
-      <AppTabs />
+      <!-- Panggil TabNavigation di sini -->
+      <TabNavigation />
       
       <!-- HANYA TAMPILKAN KOMPONEN BERDASARKAN activeTab -->
       <HistoryTab v-if="store.activeTab === 'HISTORY'" />
@@ -31,7 +31,7 @@ const store = useCurrencyStore()
 import Navbar from './components/Navbar.vue'
 import LiveTicker from './components/LiveTicker.vue'
 import ConverterCard from './components/ConverterCard.vue'
-import AppTabs from './components/AppTabs.vue'
+import TabNavigation from './components/TabNavigation.vue'
 import HistoryTab from './components/HistoryTab.vue'
 import CompareTab from './components/CompareTab.vue'
 </script>
