@@ -7,8 +7,12 @@
     </div>
 
     <!-- Empty State -->
-    <div v-if="store.favorites.length === 0" class="text-center py-5 text-secondary">
-      No favorites pinned yet.
+    <div v-if="store.favorites.length === 0" class="text-center py-5 d-flex flex-column align-items-center justify-content-center" style="min-height: 300px;">
+        <h5 class="text-secondary fw-bold mb-2">No favorites yet</h5>
+        <p class="text-secondary opacity-75">
+            You haven't pinned any currency pairs.<br>
+            Start pinning pairs to see them here.
+        </p>
     </div>
 
     <!-- List -->

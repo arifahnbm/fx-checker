@@ -10,7 +10,20 @@
 
     <!-- Daftar Mata Uang -->
     <div class="compare-list">
-      <div v-for="pair in pairs" :key="pair.code" class="currency-row p-3 mb-2 rounded-3 d-flex justify-content-between align-items-center">
+      <!-- 1. Kondisi Loading -->
+      <div v-if="isLoading" class="text-center py-5 text-secondary">
+        Loading comparison rates...
+      </div>
+
+      <!-- 2. Kondisi Empty / Data Kosong -->
+      <div v-else-if="pairs.length === 0" class="text-center py-5 d-flex flex-column align-items-center">
+        <h5 class="text-secondary fw-bold mb-2">No currency data available</h5>
+        <p class="text-secondary opacity-75">
+          We couldn't load comparison rates for {{ baseCurrency }} right now.<br>
+          Please try again later.
+        </p>
+      </div>
+      <div v-else v-for="pair in pairs" :key="pair.code" class="currency-row p-3 mb-2 rounded-3 d-flex justify-content-between align-items-center">
         <!-- Kiri: Flag & Nama -->
         <div class="d-flex align-items-center gap-3">
           <img :src="getFlagUrl(pair.code)" class="currency-flag rounded-circle" alt="flag" />

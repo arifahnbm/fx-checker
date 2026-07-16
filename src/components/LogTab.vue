@@ -10,8 +10,12 @@
     </div>
 
     <!-- Empty State -->
-    <div v-if="store.conversionLogs.length === 0" class="text-center py-5 text-secondary">
-      No conversion history yet.
+    <div v-if="store.conversionLogs.length === 0" class="text-center py-5 d-flex flex-column align-items-center justify-content-center" style="min-height: 300px;">
+        <h5 class="text-secondary fw-bold mb-2">No conversion logs yet</h5>
+        <p class="text-secondary opacity-75">
+            Your recent conversions will appear here once<br>
+            you log them from the converter.
+        </p>
     </div>
 
     <!-- Log List -->

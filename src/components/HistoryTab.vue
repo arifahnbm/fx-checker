@@ -83,6 +83,16 @@
       
       <!-- Loading & Chart Apex -->
       <div v-if="isLoading" class="text-center py-5 stat-label">...</div>
+
+      <!-- KONDISI 2: Empty/Error State -->
+      <div v-else-if="series.length === 0" class="text-center py-5 d-flex flex-column align-items-center justify-content-center" style="min-height: 350px;">
+        <h5 class="text-secondary fw-bold mb-2">No chart data available</h5>
+        <p class="text-secondary opacity-75">
+          We couldn't load rate history for {{ baseCurrency }}/{{ targetCurrency }} right now.<br>
+          This usually clears up in a minute.
+        </p>
+      </div>
+
       <apexchart v-else type="area" height="350" :options="chartOptions" :series="series" />
     </div>
   </div>
