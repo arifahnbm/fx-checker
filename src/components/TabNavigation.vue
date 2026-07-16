@@ -14,7 +14,7 @@
       <li class="nav-item">
         <a href="#" @click.prevent="store.activeTab = 'FAVORITES'"
            :class="['nav-link d-flex align-items-center gap-2', { 'active': store.activeTab === 'FAVORITES' }]">
-           FAVORITES <span class="badge-lime">10</span>
+           FAVORITES <span class="badge-lime">{{ store.favorites.length }}</span>
         </a>
       </li>
       <li class="nav-item">
@@ -29,11 +29,25 @@
     <div class="mobile-dropdown d-md-none position-relative">
       <!-- Trigger (Kotak yang kelihatan) -->
       <div class="dropdown-trigger rounded-3 d-flex justify-content-between align-items-center px-3 py-3" 
-           @click="isOpen = !isOpen">
-        <span class="fw-bold">{{ store.activeTab }}</span>
+     @click="isOpen = !isOpen">
+  
+        <!-- Bagian Teks dan Badge -->
+        <span class="d-flex align-items-center gap-2">
+          <span class="fw-bold">{{ store.activeTab }}</span>
+          
+          <!-- Tampilkan badge HANYA jika tab yang aktif memiliki badge -->
+          <span v-if="store.activeTab === 'FAVORITES'" class="badge-lime">
+            {{ store.favorites.length }}
+          </span>
+          <span v-if="store.activeTab === 'LOG'" class="badge-lime">
+            8
+          </span>
+        </span>
+
+        <!-- Chevron Icon -->
         <span class="chevron" :class="{ 'rotate': isOpen }">
           <svg width="11" height="7" viewBox="0 0 11 7" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path d="M4.78125 5.875L0.15625 1.28125C0 1.15625 0 0.90625 0.15625 0.75L0.78125 0.15625C0.9375 0 1.15625 0 1.3125 0.15625L5.0625 3.84375L8.78125 0.15625C8.9375 0 9.1875 0 9.3125 0.15625L9.9375 0.75C10.0938 0.90625 10.0938 1.15625 9.9375 1.28125L5.3125 5.875C5.15625 6.03125 4.9375 6.03125 4.78125 5.875Z" fill="white"/>
+            <path d="M4.78125 5.875L0.15625 1.28125C0 1.15625 0 0.90625 0.15625 0.75L0.78125 0.15625C0.9375 0 1.15625 0 1.3125 0.15625L5.0625 3.84375L8.78125 0.15625C8.9375 0 9.1875 0 9.3125 0.15625L9.9375 0.75C10.0938 0.90625 10.0938 1.15625 9.9375 1.28125L5.3125 5.875C5.15625 6.03125 4.9375 6.03125 4.78125 5.875Z" fill="white"/>
           </svg>
         </span>
       </div>
@@ -43,7 +57,7 @@
         <div class="menu-item" @click="selectTab('HISTORY')">HISTORY</div>
         <div class="menu-item" @click="selectTab('COMPARE')">COMPARE</div>
         <div class="menu-item d-flex justify-content-between align-items-center" @click="selectTab('FAVORITES')">
-          FAVORITES <span class="badge-lime">10</span>
+          FAVORITES <span class="badge-lime">{{ store.favorites.length }}</span>
         </div>
         <div class="menu-item d-flex justify-content-between align-items-center" @click="selectTab('LOG')">
           LOG <span class="badge-lime">8</span>

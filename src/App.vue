@@ -20,6 +20,7 @@
       <!-- HANYA TAMPILKAN KOMPONEN BERDASARKAN activeTab -->
       <HistoryTab v-if="store.activeTab === 'HISTORY'" />
       <CompareTab v-else-if="store.activeTab === 'COMPARE'" />
+      <FavoritesTab v-else-if="store.activeTab === 'FAVORITES'" />
       
     </div>
   </div>
@@ -34,4 +35,5 @@ import ConverterCard from './components/ConverterCard.vue'
 import TabNavigation from './components/TabNavigation.vue'
 import HistoryTab from './components/HistoryTab.vue'
 import CompareTab from './components/CompareTab.vue'
+import FavoritesTab from './components/FavoritesTab.vue'
 </script>
