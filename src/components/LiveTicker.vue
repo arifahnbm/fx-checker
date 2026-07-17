@@ -34,7 +34,6 @@
 
 <script setup>
 import { ref, onMounted } from 'vue'
-import { getLatestRates } from '../services/api'
 
 const isLoading = ref(true)
 const tickerPairs = ref([])
@@ -44,27 +43,58 @@ const majorCurrencies = ['EUR', 'JPY', 'GBP', 'AUD', 'CHF', 'CAD', 'SGD']
 
 const loadTicker = async () => {
   try {
-    // Ambil kurs terbaru dengan base USD
-    const data = await getLatestRates('USD')
+    isLoading.value = true
     
-    // Susun data untuk ditampilkan di template
+    // 1. Dapatkan tanggal 3 hari yang lalu untuk mendapatkan perbandingan (mengatasi weekend)
+    const d = new Date()
+    d.setDate(d.getDate() - 3)
+    const fromDate = d.toISOString().split('T')[0]
+    
+    // 2. Fetch Time Series ke Frankfurter API v2
+    // Menggunakan parameter 'quotes' agar data yang ditarik hanya mata uang mayor saja (biar ringan)
+    const quotesStr = majorCurrencies.join(',')
+    const res = await fetch(`https://api.frankfurter.dev/v2/rates?from=${fromDate}&base=USD&quotes=${quotesStr}`)
+    const data = await res.json()
+    
+    // 3. Kelompokkan data yang masih berupa flat array berdasarkan 'quote'
+    const grouped = {}
+    majorCurrencies.forEach(c => grouped[c] = [])
+    
+    data.forEach(item => {
+      if (grouped[item.quote]) {
+        grouped[item.quote].push(item)
+      }
+    })
+
+    // 4. Kalkulasi Rate Terbaru dan Persentase Change
     tickerPairs.value = majorCurrencies.map(currency => {
-      const rate = data.rates[currency]
+      // Sortir berdasarkan tanggal untuk memastikan urutan benar (terlama -> terbaru)
+      const history = grouped[currency].sort((a, b) => new Date(a.date) - new Date(b.date))
       
-      // CATATAN MENTOR: 
-      // Karena endpoint /latest API Frankfurter tidak memberikan data persentase naik/turun 
-      // harian secara langsung, kita buat "dummy" angka persentase agar UI terlihat
-      // persis seperti desain Figma. Di dunia kerja nyata, data ini didapat dari API Premium.
-      const mockChange = (Math.random() * 0.5).toFixed(2)
-      const isUp = Math.random() > 0.5
+      // Safety check jika gagal mengambil data
+      if (history.length === 0) {
+        return { pair: `USD/${currency}`, rate: '...', change: '0.00', isUp: true }
+      }
+      
+      const latestRate = history[history.length - 1].rate
+      let changePercent = 0
+      
+      // Pastikan ada data hari sebelumnya untuk dihitung
+      if (history.length > 1) {
+        const previousRate = history[history.length - 2].rate
+        changePercent = ((latestRate - previousRate) / previousRate) * 100
+      }
+      
+      const isUp = changePercent >= 0
       
       return {
         pair: `USD/${currency}`,
-        rate: rate ? rate.toFixed(4) : '...',
-        change: isUp ? `+${mockChange}` : `-${mockChange}`,
+        rate: latestRate.toFixed(4),
+        change: Math.abs(changePercent).toFixed(2), // Gunakan Math.abs karena tanda ▲/▼ di-handle di template
         isUp: isUp
       }
     })
+    
   } catch (error) {
     console.error("Gagal memuat ticker:", error)
   } finally {
@@ -125,4 +155,6 @@ onMounted(() => {
 
 .text-green { color: #42EB05 !important; }
 .text-red { color: #FF4141 !important; }
+.fw-bold { color: #9D9D9D !important; }
+
 </style>

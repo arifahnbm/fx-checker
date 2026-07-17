@@ -8,10 +8,9 @@
 
     <!-- Empty State -->
     <div v-if="store.favorites.length === 0" class="text-center py-5 d-flex flex-column align-items-center justify-content-center" style="min-height: 300px;">
-        <h5 class="text-secondary fw-bold mb-2">No favorites yet</h5>
+        <h5 class="text-secondary fw-bold mb-2">No pinned pairs yet</h5>
         <p class="text-secondary opacity-75">
-            You haven't pinned any currency pairs.<br>
-            Start pinning pairs to see them here.
+            Pin a pair to track its rate here. Tap the star <br/> icon on any conversion or comparison row.
         </p>
     </div>
 
@@ -20,7 +19,7 @@
       <div v-for="pairKey in store.favorites" :key="pairKey" 
            class="currency-row p-3 mb-2 rounded-3 d-flex justify-content-between align-items-center">
         
-        <!-- Pair Text (USD -> EUR) -->
+        <!-- Pair Text (Misal: USD -> EUR) -->
         <div class="d-flex align-items-center">
           <span class="fw-bold fs-5">{{ formatPair(pairKey) }}</span>
         </div>
@@ -28,10 +27,13 @@
         <!-- Right: Rate & Star -->
         <div class="d-flex align-items-center gap-4">
           <div class="text-end">
-            <div class="fw-bold fs-5">{{ getRate(pairKey) > 0 ? getRate(pairKey).toFixed(4) : '...' }}</div> <!-- Placeholder Rate -->
+            <!-- Menampilkan Data Rate Real -->
+            <div class="fw-bold fs-5">{{ getRate(pairKey) > 0 ? getRate(pairKey).toFixed(4) : '...' }}</div>
+            
+            <!-- Menampilkan Data Change Real -->
             <small :class="calculateChange(pairKey) >= 0 ? 'text-green' : 'text-red'">
-                {{ (calculateChange(pairKey) > 0 ? '+' : '') + calculateChange(pairKey) + '%' }}
-            </small> <!-- Placeholder Change -->
+                {{ (calculateChange(pairKey) > 0 ? '▲ +' : '▼ ') + calculateChange(pairKey) + '%' }}
+            </small>
           </div>
           
           <button @click="store.toggleFavorite(parseBase(pairKey), parseTarget(pairKey))" 
@@ -50,33 +52,79 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 import { useCurrencyStore } from '../stores/currencyStore'
-import { getLatestRates } from '../services/api'
-const store = useCurrencyStore()
-const ratesData = ref({})
 
-// Helper untuk memformat tampilan "USD -> EUR"
+const store = useCurrencyStore()
+
+// State untuk menyimpan rate terbaru dan persentase perubahannya
+const ratesData = ref({})
+const changesData = ref({}) 
+
+// Helper untuk memformat key
 const formatPair = (key) => key.replace('-', ' → ')
 const parseBase = (key) => key.split('-')[0]
 const parseTarget = (key) => key.split('-')[1]
 
-// Mengambil rate berdasarkan key "USD-EUR"
+// Mengambil rate terbaru
 const getRate = (key) => {
   const base = parseBase(key)
   const target = parseTarget(key)
   return ratesData.value[base]?.[target] || 0
 }
 
-// Fetch data saat komponen dimuat
+// Mengambil persentase perubahan yang sudah dikalkulasi
+const calculateChange = (key) => {
+  const base = parseBase(key)
+  const target = parseTarget(key)
+  return changesData.value[base]?.[target] || 0
+}
+
 const fetchFavoritesRates = async () => {
-  // Ambil list base currency yang unik dari favorites
+  // Ambil list base currency unik
   const uniqueBases = [...new Set(store.favorites.map(f => parseBase(f)))]
   
+  // Hitung tanggal dari 3 hari yang lalu (Time Series)
+  const d = new Date()
+  d.setDate(d.getDate() - 3)
+  const fromDate = d.toISOString().split('T')[0]
+
   for (const base of uniqueBases) {
     try {
-      const data = await getLatestRates(base)
-      ratesData.value[base] = data.rates
+      // Fetch time series data menggunakan API publik Frankfurter v2
+      const res = await fetch(`https://api.frankfurter.dev/v2/rates?from=${fromDate}&base=${base}`)
+      const data = await res.json()
+      
+      if (!ratesData.value[base]) ratesData.value[base] = {}
+      if (!changesData.value[base]) changesData.value[base] = {}
+
+      // Data dari API v2 berbentuk flat array, kita perlu kelompokkan berdasarkan quote (mata uang target)
+      const groupedByQuote = {}
+      data.forEach(item => {
+        if (!groupedByQuote[item.quote]) groupedByQuote[item.quote] = []
+        groupedByQuote[item.quote].push(item)
+      })
+
+      // Kalkulasi rate terbaru dan selisihnya
+      for (const quote in groupedByQuote) {
+        // Urutkan array berdasarkan tanggal dari terlama -> terbaru
+        const history = groupedByQuote[quote].sort((a, b) => new Date(a.date) - new Date(b.date))
+        
+        // Rate terkini adalah item paling akhir di array
+        const latestRate = history[history.length - 1].rate
+        ratesData.value[base][quote] = latestRate
+
+        // Hitung change % jika ada lebih dari 1 hari data
+        if (history.length > 1) {
+          const previousRate = history[history.length - 2].rate
+          const changePercent = ((latestRate - previousRate) / previousRate) * 100
+          
+          // Simpan dengan pembulatan 2 desimal
+          changesData.value[base][quote] = Number(changePercent.toFixed(2))
+        } else {
+          changesData.value[base][quote] = 0
+        }
+      }
     } catch (e) {
-      console.error(`Gagal fetch ${base}:`, e)
+      console.error(`Gagal fetch time series untuk ${base}:`, e)
     }
   }
 }
@@ -84,13 +132,6 @@ const fetchFavoritesRates = async () => {
 onMounted(() => {
   fetchFavoritesRates()
 })
-
-// kita kembalikan 0 dulu agar tidak crash.
-const calculateChange = (key) => {
-  // Jika nanti kamu sudah punya data historis, logicnya taruh di sini
-  return 0.16; // Placeholder sementara agar tampilan tidak error
-}
-
 </script>
 
 <style scoped>
@@ -100,6 +141,9 @@ const calculateChange = (key) => {
   transition: background-color 0.2s;
 }
 .currency-row:hover { background-color: #1e1e21; }
+
+.text-green { color: #CEF739; } /* Hijau Lime */
+.text-red { color: #FF4D4D; }   /* Merah untuk rate turun */
 
 .btn-star {
   width: 40px; height: 40px;

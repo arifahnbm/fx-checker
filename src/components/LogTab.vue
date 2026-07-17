@@ -11,10 +11,9 @@
 
     <!-- Empty State -->
     <div v-if="store.conversionLogs.length === 0" class="text-center py-5 d-flex flex-column align-items-center justify-content-center" style="min-height: 300px;">
-        <h5 class="text-secondary fw-bold mb-2">No conversion logs yet</h5>
+        <h5 class="text-secondary fw-bold mb-2">No conversions logged yet</h5>
         <p class="text-secondary opacity-75">
-            Your recent conversions will appear here once<br>
-            you log them from the converter.
+            Every conversion is recorded here automatically when you tap LOG CONVERSION. <br/> Your log is private to this session and this browser.
         </p>
     </div>
 
