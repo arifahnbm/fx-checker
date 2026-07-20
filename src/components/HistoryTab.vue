@@ -252,18 +252,11 @@ watch([baseCurrency, targetCurrency], () => {
   color: #FFFFFF;
 }
 
-.btn-range.active {
-  background-color: #2E2E2E; /* Warna background saat aktif */
-  color: #ffffff;
+.btn-range.active, .btn-range:focus {
+  background-color: #2E2E2E; 
+  color: #CEF739; /* Teks berubah menjadi lime saat aktif/fokus */
+  border: 1px solid #CEF739; /* Border lime saat aktif/fokus */
   font-weight: bold;
-  border: none;        /* Pastikan tidak ada border saat aktif */
-  outline: none;
-}
-
-/* Opsional: Jika masih muncul garis biru saat diklik (di beberapa browser) */
-.btn-range:focus {
-  outline: none;
-  box-shadow: none; /* Menghilangkan bayangan bawaan */
 }
 
 .currency-select-chart {

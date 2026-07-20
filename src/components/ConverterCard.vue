@@ -347,13 +347,31 @@ const handleLog = () => {
   color: #FFFFFF;
   font-size: 24px;
   font-weight: 700;
-  width: 100%;
+  width: 200px;
   outline: none;
   font-family: 'JetBrains Mono', monospace;
+}
+.amount-input:hover {
+  cursor: text;
+  border-bottom: 1px solid #9d9d9d;
+}
+.amount-input::-webkit-outer-spin-button,
+.amount-input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* 2. Menghilangkan panah (spin buttons) di Firefox */
+.amount-input[type="number"] {
+  -moz-appearance: textfield;
 }
 .amount-output {
   color: #CEF739;
   font-size: 24px;
+}
+.amount-output:hover {
+  border-bottom: 1px solid #9d9d9d;
+  cursor: text;
 }
 
 /* === CSS CUSTOM DROPDOWN BENDERA === */
@@ -382,9 +400,10 @@ const handleLog = () => {
   z-index: 100;
 }
 
+
 .search-box {
   background-color: #202022;
-  border: 1px solid #333;
+  border: 1px solid #9D9D9D;
 }
 .search-input {
   background: transparent;
@@ -407,7 +426,7 @@ const handleLog = () => {
   cursor: pointer;
   transition: background-color 0.1s;
 }
-.currency-item:hover { background-color: #2E2E2E; }
+.currency-item:hover { border: 1px solid #9D9D9D; }
 .currency-name {
   font-size: 14px;
   max-width: 150px;
@@ -442,7 +461,7 @@ const handleLog = () => {
   font-size: 18px;
   cursor: pointer;
 }
-.btn-swap:hover { border-color: #CEF739; color: #CEF739; }
+.btn-swap:hover { border-color: #3d3d3d; color: #ffffff; }
 
 .btn-lime {
   background-color: #CEF739;
@@ -462,7 +481,7 @@ const handleLog = () => {
   background-color: #2E2E2E;
 }
 
-.btn-lime:hover { background-color: #B5DC32; }
+.btn-lime:hover { background-color: #a0c32f; }
 
 .btn-outline {
   background-color: transparent;
@@ -470,11 +489,22 @@ const handleLog = () => {
   border: 1px solid #FFFFFF;
   border-radius: 8px;
 }
-.btn-outline:hover { background-color: #2E2E2E; }
+.btn-outline:hover { background-color: #283300; color: #ffffff; }
 
 .rate-info {
   color: #9D9D9D;
   letter-spacing: 0.5px;
 }
 .rate-info strong { color: #FFFFFF; }
+
+/* Pastikan input saat difokuskan memiliki outline yang jelas */
+.amount-input:focus {
+  outline: none;
+  border-bottom: 1px solid #CEF739 !important; /* Efek fokus pada input */
+}
+
+/* Container saat ada elemen di dalamnya yang fokus */
+.input-box:focus-within {
+  border: 1px solid #CEF739; /* Efek fokus pada kotak pembungkus */
+}
 </style>

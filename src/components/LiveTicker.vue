@@ -20,7 +20,7 @@
           :key="index" 
           class="ticker-item d-flex align-items-center gap-2 small"
         >
-          <span class="fw-bold text-white">{{ item.pair }}</span>
+          <span class="text-currencies fw-bold text-white">{{ item.pair }}</span>
           <span class="text-white">{{ item.rate }}</span>
           <span :class="item.isUp ? 'text-green' : 'text-red'">
             {{ item.isUp ? '▲' : '▼' }} {{ item.change }}%
@@ -155,6 +155,6 @@ onMounted(() => {
 
 .text-green { color: #42EB05 !important; }
 .text-red { color: #FF4141 !important; }
-.fw-bold { color: #9D9D9D !important; }
+.text-currencies { color: #9D9D9D !important; }
 
 </style>

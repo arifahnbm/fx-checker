@@ -83,7 +83,8 @@ const selectTab = (tab) => {
 
 <style scoped>
 /* Desktop Styles (Tetap sama) */
-.nav-link { color: #9D9D9D; font-weight: 500; transition: all 0.3s ease; border-bottom: 2px solid transparent; }
+.nav-link { color: #ffffff; font-weight: 500; transition: all 0.3s ease; border-bottom: 2px solid transparent; }
+.nav-link:hover { color: #9D9D9D; font-weight: 500; transition: all 0.3s ease; border-bottom: 2px solid transparent; }
 .nav-link.active { color: #FFFFFF; border-bottom: 2px solid #CEF739; }
 
 /* Mobile Styles */
@@ -106,7 +107,10 @@ const selectTab = (tab) => {
   border-radius: 6px;
   font-weight: 500;
 }
-.menu-item:hover { background-color: #2E2E2E; }
+.menu-item:hover {
+  background-color: #ffffff; 
+  transition: background-color 0.2s ease;
+}
 
 /* Badge style */
 .badge-lime {
@@ -116,5 +120,19 @@ const selectTab = (tab) => {
   padding: 2px 8px;
   border-radius: 12px;
   font-weight: 700;
+}
+
+.nav-link { 
+  color: #ffffff; 
+  font-weight: 500; 
+  transition: all 0.3s ease; 
+  border-bottom: 2px solid transparent; 
+}
+
+/* Focus/Active State */
+.nav-link.active, .nav-link:focus { 
+  color: #FFFFFF; 
+  border-bottom: 2px solid #CEF739; /* Warna lime saat fokus/aktif */
+  outline: none;
 }
 </style>

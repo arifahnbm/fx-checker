@@ -136,11 +136,11 @@ onMounted(() => {
 
 <style scoped>
 .currency-row {
-  background-color: #171719;
-  border: 1px solid #202022;
+  background-color: #202022;
   transition: background-color 0.2s;
+  border: 1px solid #2E2E2E;
 }
-.currency-row:hover { background-color: #1e1e21; }
+.currency-row:hover { border: 1px solid #454547; }
 
 .text-green { color: #CEF739; } /* Hijau Lime */
 .text-red { color: #FF4D4D; }   /* Merah untuk rate turun */
@@ -152,5 +152,7 @@ onMounted(() => {
   background: transparent;
   display: flex; align-items: center; justify-content: center;
 }
-.btn-star.active { border-color: #CEF739; }
+.btn-star.active { border-color: #CEF739;  }
+.btn-star.active:hover { border-color: #CEF739;
+  background-color: #2E2E2E;  }
 </style>

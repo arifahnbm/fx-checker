@@ -66,10 +66,10 @@ const formatTime = (date) => {
 
 <style scoped>
 .log-row {
-  background-color: #171719;
-  border: 1px solid #202022;
+  background-color: #202022;
+  border: 1px solid #2E2E2E;
 }
-.log-row:hover { background-color: #1e1e21; }
+.log-row:hover { border: 1px solid #454547; }
 
 .text-lime { color: #CEF739; }
 

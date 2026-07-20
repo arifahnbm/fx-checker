@@ -128,14 +128,19 @@ onMounted(() => {
   flex-direction: column;
 }
 
-.currency-row {
-  background-color: #171719;
-  transition: background-color 0.2s;
-  border: 1px solid #202022;
+/* Saat baris difokuskan atau dipilih */
+.currency-row:focus, .currency-row:active, .currency-row.active {
+  border: 1px solid #CEF739; /* Border lime saat fokus */
+  background-color: #202022;
+}
+
+/* Pastikan style hover tetap konsisten */
+.currency-row:hover {
+  border: 1px solid #454547;
 }
 
 .currency-row:hover {
-  background-color: #1e1e21;
+  border: 1px solid #454547;
 }
 
 .currency-flag {
@@ -158,5 +163,9 @@ onMounted(() => {
 
 .btn-star.active {
   border-color: #CEF739;
+}
+.btn-star.active:hover {
+  border-color: #CEF739;
+  background-color: #2E2E2E;  
 }
 </style>
