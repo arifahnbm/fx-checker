@@ -1,7 +1,7 @@
 <template>
   <div class="tabs-container mb-4">
     
-    <!-- 1. Tampilan Desktop: Horizontal Tabs -->
+    <!-- Tampilan Desktop: Horizontal Tabs -->
     <ul class="nav d-none d-md-flex gap-4 border-bottom border-secondary" style="--bs-border-opacity: .3;">
       <li class="nav-item">
         <a href="#" @click.prevent="store.activeTab = 'HISTORY'" 
@@ -25,7 +25,7 @@
       </li>
     </ul>
 
-    <!-- 2. Tampilan Mobile: Custom Dropdown -->
+    <!-- Tampilan Mobile: Custom Dropdown -->
     <div class="mobile-dropdown d-md-none position-relative">
       <!-- Trigger (Kotak yang kelihatan) -->
       <div class="dropdown-trigger rounded-3 d-flex justify-content-between align-items-center px-3 py-3" 
@@ -77,12 +77,12 @@ const isOpen = ref(false)
 
 const selectTab = (tab) => {
   store.activeTab = tab
-  isOpen.value = false // Tutup menu setelah diklik
+  isOpen.value = false 
 }
 </script>
 
 <style scoped>
-/* Desktop Styles (Tetap sama) */
+/* Desktop Styles */
 .nav-link { color: #ffffff; font-weight: 500; transition: all 0.3s ease; border-bottom: 2px solid transparent; }
 .nav-link:hover { color: #9D9D9D; font-weight: 500; transition: all 0.3s ease; border-bottom: 2px solid transparent; }
 .nav-link.active { color: #FFFFFF; border-bottom: 2px solid #CEF739; }
@@ -132,7 +132,7 @@ const selectTab = (tab) => {
 /* Focus/Active State */
 .nav-link.active, .nav-link:focus { 
   color: #FFFFFF; 
-  border-bottom: 2px solid #CEF739; /* Warna lime saat fokus/aktif */
+  border-bottom: 2px solid #CEF739; 
   outline: none;
 }
 </style>

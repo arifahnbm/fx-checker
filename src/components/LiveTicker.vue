@@ -45,18 +45,18 @@ const loadTicker = async () => {
   try {
     isLoading.value = true
     
-    // 1. Dapatkan tanggal 3 hari yang lalu untuk mendapatkan perbandingan (mengatasi weekend)
+    // Dapatkan tanggal 3 hari yang lalu untuk mendapatkan perbandingan (mengatasi weekend)
     const d = new Date()
     d.setDate(d.getDate() - 3)
     const fromDate = d.toISOString().split('T')[0]
     
-    // 2. Fetch Time Series ke Frankfurter API v2
+    // Fetch Time Series ke Frankfurter API v2
     // Menggunakan parameter 'quotes' agar data yang ditarik hanya mata uang mayor saja (biar ringan)
     const quotesStr = majorCurrencies.join(',')
     const res = await fetch(`https://api.frankfurter.dev/v2/rates?from=${fromDate}&base=USD&quotes=${quotesStr}`)
     const data = await res.json()
     
-    // 3. Kelompokkan data yang masih berupa flat array berdasarkan 'quote'
+    // Kelompokkan data yang masih berupa flat array berdasarkan 'quote'
     const grouped = {}
     majorCurrencies.forEach(c => grouped[c] = [])
     
@@ -66,9 +66,8 @@ const loadTicker = async () => {
       }
     })
 
-    // 4. Kalkulasi Rate Terbaru dan Persentase Change
+    // Kalkulasi Rate Terbaru dan Persentase Change
     tickerPairs.value = majorCurrencies.map(currency => {
-      // Sortir berdasarkan tanggal untuk memastikan urutan benar (terlama -> terbaru)
       const history = grouped[currency].sort((a, b) => new Date(a.date) - new Date(b.date))
       
       // Safety check jika gagal mengambil data
@@ -78,8 +77,6 @@ const loadTicker = async () => {
       
       const latestRate = history[history.length - 1].rate
       let changePercent = 0
-      
-      // Pastikan ada data hari sebelumnya untuk dihitung
       if (history.length > 1) {
         const previousRate = history[history.length - 2].rate
         changePercent = ((latestRate - previousRate) / previousRate) * 100
@@ -90,7 +87,7 @@ const loadTicker = async () => {
       return {
         pair: `USD/${currency}`,
         rate: latestRate.toFixed(4),
-        change: Math.abs(changePercent).toFixed(2), // Gunakan Math.abs karena tanda ▲/▼ di-handle di template
+        change: Math.abs(changePercent).toFixed(2), 
         isUp: isUp
       }
     })
@@ -114,10 +111,10 @@ onMounted(() => {
 
 /* Kotak hijau stabilo di sebelah kiri */
 .ticker-label {
-  background-color: #CEF739; /* Lime 500 */
+  background-color: #CEF739; 
   color: #0A0A0A;
   white-space: nowrap;
-  box-shadow: 5px 0 15px rgba(0,0,0,0.5); /* Memberi bayangan agar teks berjalan seperti masuk ke bawahnya */
+  box-shadow: 5px 0 15px rgba(0,0,0,0.5); 
 }
 
 /* Titik berkedip merah/hitam */
@@ -138,7 +135,7 @@ onMounted(() => {
 .ticker-track {
   white-space: nowrap;
   display: inline-flex;
-  animation: marquee 25s linear infinite; /* Kecepatan animasi 25 detik */
+  animation: marquee 25s linear infinite; /
 }
 
 /* Fitur Interaktif: Berhenti berjalan saat disorot mouse */

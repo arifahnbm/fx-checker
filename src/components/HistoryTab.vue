@@ -4,13 +4,9 @@
     <div class="row g-3 mb-4">
       
       <!-- AREA KARTU STATISTIK -->
-      <!-- col-12: Mengambil 100% lebar di Mobile (375px) dan Tablet (768px) -->
-      <!-- col-xl-8: Menyusut menjadi 8 kolom saat Desktop (1200px / 1440px) -->
       <div class="col-12 col-xl-8">
         <div class="row g-3">
           <!-- Masing-masing Kartu -->
-          <!-- col-6: Menjadi 2 kolom (50%) di Mobile -->
-          <!-- col-md-3: Menjadi 4 kolom (25%) di Tablet & Desktop -->
           <div class="col-6 col-md-3">
             <div class="stat-card p-3 rounded-3 h-100">
               <div class="stat-label mb-1">OPEN</div>
@@ -43,11 +39,7 @@
       </div>
       
       <!-- AREA TOMBOL RENTANG WAKTU -->
-      <!-- col-12: Mengambil 100% lebar dan berada di bawah kartu saat Mobile & Tablet -->
-      <!-- col-xl-4: Berada di sebelah kanan kartu (4 kolom) saat Desktop -->
-      <!-- d-flex, justify-content-xl-end, align-items-xl-end: Mengatur posisi tombol rata kanan-bawah HANYA di Desktop -->
       <div class="col-12 col-xl-4 d-flex justify-content-start justify-content-xl-end align-items-center  mt-3 mt-xl-0">
-        <!-- flex-wrap memastikan tombol bisa turun ke baris baru jika layar terlalu sempit -->
         <div class="d-flex flex-wrap gap-" style="background-color: #171719; padding: 8px 12px; border-radius: 8px;">
           <button 
             v-for="r in ranges" 
@@ -65,8 +57,6 @@
 
     <!-- Area Grafik (Chart) -->
     <div class="chart-container p-4 rounded-4">
-      
-      <!-- BAGIAN YANG DIUPDATE (TANPA DROPDOWN) -->
       <div class="d-flex justify-content-between align-items-center mb-3">
         
         <!-- Menampilkan Mata Uang dari Pinia Store -->
@@ -76,7 +66,7 @@
           <span class="fs-5 fw-bold text-white">{{ targetCurrency }}</span>
         </div>
         
-        <!-- Label Rentang Waktu (Bisa dibuat dinamis agar lebih keren) -->
+        <!-- Label Rentang Waktu -->
         <span class="stat-label fs-6">{{ chartInfoText }}</span>
         
       </div>
@@ -84,7 +74,7 @@
       <!-- Loading & Chart Apex -->
       <div v-if="isLoading" class="text-center py-5 stat-label">...</div>
 
-      <!-- KONDISI 2: Empty/Error State -->
+      <!-- Empty/Error State -->
       <div v-else-if="series.length === 0" class="text-center py-5 d-flex flex-column align-items-center justify-content-center" style="min-height: 350px;">
         <h5 class="text-secondary fw-bold mb-2">No chart data available</h5>
         <p class="text-secondary opacity-75">
@@ -101,15 +91,13 @@
 <script setup>
 import { ref, onMounted, watch } from 'vue';
 import { getHistoryRates } from '../services/api';
-
-// 1. Import Pinia Store dan storeToRefs
 import { storeToRefs } from 'pinia';
-import { useCurrencyStore } from '../stores/currencyStore'; // Sesuaikan path dengan file store-mu
+import { useCurrencyStore } from '../stores/currencyStore';
 
-// 2. Inisialisasi Store
+// Inisialisasi Store
 const currencyStore = useCurrencyStore();
 
-// 3. Ekstrak state agar tetap reaktif menggunakan storeToRefs
+// Ekstrak state agar tetap reaktif menggunakan storeToRefs
 const { baseCurrency, targetCurrency } = storeToRefs(currencyStore);
 
 const isLoading = ref(true)
@@ -148,14 +136,9 @@ const fetchHistory = async (range = '1M') => {
   try {
     const endDate = new Date().toISOString().split('T')[0]
     const startDate = getStartDate(range)
-    
-    // --- KODE BARU: Format string tanggal (Misal: 14 Jun 2026 - 14 Jul 2026) ---
     const dateConfig = { day: 'numeric', month: 'short', year: 'numeric' }
-    // Memakai 'en-GB' agar formatnya DD MMM YYYY. Jika ingin bahasa Indonesia, ganti dengan 'id-ID'
     const startStr = new Date(startDate).toLocaleDateString('en-GB', dateConfig)
     const endStr = new Date(endDate).toLocaleDateString('en-GB', dateConfig)
-    
-    // -------------------------------------------------------------------------
 
     const data = await getHistoryRates(baseCurrency.value, targetCurrency.value, startDate, endDate)
     const dates = Object.keys(data.rates)
@@ -178,21 +161,11 @@ const fetchHistory = async (range = '1M') => {
       changePct: changePct.toFixed(2)
     }
 
-    // --- KODE BARU: Membentuk format "0.8530 · MAY 14 16:00 CET" ---
-    
-    // Ambil tanggal terakhir dari array dates API (contoh format: "2026-05-14")
     const lastDateStr = dates[dates.length - 1]
     const dateObj = new Date(lastDateStr)
-    
-    // Ubah bulan jadi teks pendek Bahasa Inggris (Jan, Feb, May) lalu jadikan HURUF BESAR (MAY)
     const month = dateObj.toLocaleDateString('en-US', { month: 'short' }).toUpperCase()
-    // Ambil tanggal
     const day = dateObj.getDate()
-    // Ambil rate terakhir, format dengan 4 angka desimal
     const lastRateStr = last.toFixed(4)
-    
-    // (Opsional) Jika API-mu tidak mengirimkan jam, kita asumsikan penutupan pasar jam 16:00 CET
-    // Jika kamu ingin jamnya mengikuti waktu user (current time), ubah '16:00 CET' jadi dinamis
     const timeZoneStr = '16:00 CET' 
     
     // Gabungkan semuanya menggunakan simbol titik tengah (·)
@@ -208,30 +181,29 @@ const fetchHistory = async (range = '1M') => {
 
 onMounted(() => fetchHistory())
 
-// 4. Watcher memantau state dari Pinia Store
+// Watcher memantau state dari Pinia Store
 watch([baseCurrency, targetCurrency], () => {
   fetchHistory(activeRange.value)
 })
 </script>
 
 <style scoped>
-/* Menggunakan kode warna dari Style Guide Figma */
 .history-tab {
-  background-color: #0A0A0A; /* Neutral 900 */
+  background-color: #0A0A0A; 
 }
 .stat-card {
-  background-color: #171719; /* Neutral 700 */
+  background-color: #171719; 
 }
 .chart-container {
-  background-color: #171719; /* Neutral 700 */
+  background-color: #171719; 
 }
 .stat-label {
-  color: #9D9D9D; /* Neutral 200 */
+  color: #9D9D9D; 
   font-size: 12px;
   letter-spacing: 0.5px;
 }
-.text-green { color: #42EB05 !important; } /* Green 500 */
-.text-red { color: #FF4141 !important; } /* Red 500 */
+.text-green { color: #42EB05 !important; } 
+.text-red { color: #FF4141 !important; } 
 
 .btn-range {
   background: transparent;
@@ -241,11 +213,9 @@ watch([baseCurrency, targetCurrency], () => {
   font-size: 12px;
   cursor: pointer;
   transition: all 0.2s;
-  
-  /* TAMBAHKAN 3 BARIS INI */
-  border: none;        /* Menghilangkan border bawaan */
-  outline: none;       /* Menghilangkan outline/garis fokus biru */
-  appearance: none;    /* Memastikan tombol tidak memakai style sistem operasi */
+  border: none;      
+  outline: none;       
+  appearance: none;    
 }
 
 .btn-range:hover {
@@ -254,8 +224,8 @@ watch([baseCurrency, targetCurrency], () => {
 
 .btn-range.active, .btn-range:focus {
   background-color: #2E2E2E; 
-  color: #CEF739; /* Teks berubah menjadi lime saat aktif/fokus */
-  border: 1px solid #CEF739; /* Border lime saat aktif/fokus */
+  color: #CEF739;
+  border: 1px solid #CEF739; 
   font-weight: bold;
 }
 
@@ -264,14 +234,14 @@ watch([baseCurrency, targetCurrency], () => {
   color: #FFFFFF;
   border: none;
   font-weight: bold;
-  font-size: 1.25rem; /* Ukuran h5 agar pas */
+  font-size: 1.25rem; 
   cursor: pointer;
   outline: none;
 }
 
 /* Mengubah warna latar belakang dropdown saat diklik */
 .currency-select-chart option {
-  background-color: #171719; /* Sama dengan warna chart-container */
+  background-color: #171719; 
   color: #FFFFFF;
 }
 </style>

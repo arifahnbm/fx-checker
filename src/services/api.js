@@ -52,7 +52,7 @@ export const getHistoryRates = async (base, target, startDate, endDate) => {
     
     const data = await response.json();
     
-    // Validasi data kosong (seperti kasus akhir pekan yang kita bahas sebelumnya)
+    // Validasi data kosong 
     if (!data.rates || Object.keys(data.rates).length === 0) {
       throw new Error('Data historis tidak tersedia untuk rentang waktu ini');
     }
@@ -60,6 +60,6 @@ export const getHistoryRates = async (base, target, startDate, endDate) => {
     return data;
   } catch (error) {
     console.error("API Error (getHistoryRates):", error);
-    throw error; // Lempar error ke komponen agar bisa menampilkan pesan gagal
+    throw error; 
   }
 };

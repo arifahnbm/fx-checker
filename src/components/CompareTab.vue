@@ -10,12 +10,12 @@
 
     <!-- Daftar Mata Uang -->
     <div class="compare-list">
-      <!-- 1. Kondisi Loading -->
+      <!-- Kondisi Loading -->
       <div v-if="isLoading" class="text-center py-5 text-secondary">
         Loading comparison rates...
       </div>
 
-      <!-- 2. Kondisi Empty / Data Kosong -->
+      <!-- Kondisi Empty / Data Kosong -->
       <div v-else-if="pairs.length === 0" class="text-center py-5 d-flex flex-column align-items-center">
         <h5 class="text-secondary fw-bold mb-2">No comparison available</h5>
         <p class="text-secondary opacity-75">
@@ -72,14 +72,14 @@ const baseCurrency = computed(() => store.baseCurrency)
 const pairs = ref([])
 const isLoading = ref(false)
 
-// 1. Definisikan fungsi getFlagUrl
+// fungsi getFlagUrl
 const getFlagUrl = (currencyCode) => {
   if (!currencyCode) return ''
   const prefix = currencyCode.substring(0, 2).toLowerCase()
   return `/images/flags/${prefix}.webp`
 }
 
-// 2. Definisikan fungsi formatNumber
+// fungsi formatNumber
 const formatNumber = (val) => {
   return val.toLocaleString(undefined, { 
     minimumFractionDigits: 2, 
@@ -92,7 +92,7 @@ watch(() => [amount.value, pairs.value], () => {
   console.log("DEBUG PAIRS:", pairs.value);
 }, { immediate: true });
 
-// 3. Fungsi Fetch Data
+// Fungsi Fetch Data
 const fetchCompareRates = async () => {
   isLoading.value = true
   try {
@@ -128,15 +128,16 @@ onMounted(() => {
   flex-direction: column;
 }
 
-/* Saat baris difokuskan atau dipilih */
-.currency-row:focus, .currency-row:active, .currency-row.active {
-  border: 1px solid #CEF739; /* Border lime saat fokus */
+.currency-row {
   background-color: #202022;
+  border: 1px solid #2E2E2E;
+  transition: all 0.3s ease;
 }
 
-/* Pastikan style hover tetap konsisten */
-.currency-row:hover {
-  border: 1px solid #454547;
+/* Saat baris difokuskan atau dipilih */
+.currency-row:focus, .currency-row:active, .currency-row.active {
+  border: 1px solid #CEF739; 
+  background-color: #202022;
 }
 
 .currency-row:hover {
@@ -152,7 +153,7 @@ onMounted(() => {
 .btn-star {
   width: 40px; height: 40px;
   border: 1px solid #2E2E2E;
-  border-radius: 8px; /* rounded-3 */
+  border-radius: 8px; 
   background: transparent;
   display: flex; align-items: center; justify-content: center;
 }

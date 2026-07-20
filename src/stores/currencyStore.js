@@ -4,8 +4,8 @@ import { ref } from 'vue'
 export const useCurrencyStore = defineStore('currency', () => {
   const baseCurrency = ref('USD')
   const targetCurrency = ref('EUR')
-  const sendAmount = ref(1000) // Pastikan ini ada
-  const activeTab = ref('HISTORY') // State untuk tab aktif
+  const sendAmount = ref(1000) 
+  const activeTab = ref('HISTORY') 
 
   const favorites = ref([])
   const conversionLogs = ref([])
@@ -39,7 +39,7 @@ export const useCurrencyStore = defineStore('currency', () => {
     target,
     amount,
     result,
-    date: new Date() // Menyimpan objek tanggal
+    date: new Date() 
   })
 }
 

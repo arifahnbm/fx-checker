@@ -1,6 +1,5 @@
 <template>
   <div class="converter-section mb-5 position-relative">
-    <!-- Overlay transparan untuk menutup dropdown jika klik di luar area -->
     <div v-if="showBaseDropdown || showTargetDropdown" class="dropdown-backdrop" @click="closeAllDropdowns"></div>
 
     <h5 class="fw-bold mb-3 tracking-wide text-white">CHECK THE RATE</h5>
@@ -8,7 +7,7 @@
     <div class="converter-card p-4 rounded-4">
       <div class="row align-items-center g-3">
         
-        <!-- ================= KOTAK SEND ================= -->
+        <!-- KOTAK SEND  -->
         <div class="col-12 col-md-5">
           <div class="input-box p-3 rounded-3 d-flex flex-column gap-2">
             <span class="text-secondary small">SEND</span>
@@ -74,14 +73,14 @@
           </div>
         </div>
         
-        <!-- ================= TOMBOL SWAP ================= -->
+        <!-- TOMBOL SWAP -->
         <div class="col-12 col-md-2 d-flex justify-content-center">
           <button @click="store.swapCurrencies()" class="btn-swap d-flex align-items-center justify-content-center rounded-3">
-            ⇄
+            <img src="../assets/images/icon-exchange.svg" alt="Swap" class="swap-icon" />
           </button>
         </div>
         
-        <!-- ================= KOTAK RECEIVE ================= -->
+        <!-- KOTAK RECEIVE -->
         <div class="col-12 col-md-5">
           <div class="input-box p-3 rounded-3 d-flex flex-column gap-2">
             <span class="text-secondary small">RECEIVE</span>
@@ -153,7 +152,7 @@
 
       <hr class="border-secondary my-4" style="--bs-border-opacity: .3; border-style: dashed;" />
 
-      <!-- ================= BARIS BAWAH ================= -->
+      <!-- BARIS BAWAH -->
       <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3">
         <div class="rate-info small">
           <strong>1</strong> {{ baseCurrency }} = <strong>{{ currentRate.toFixed(4) }}</strong> {{ targetCurrency }}
@@ -163,7 +162,7 @@
           <button @click="store.toggleFavorite(store.baseCurrency, store.targetCurrency)"
         :class="['btn fw-bold px-4 py-2 d-flex align-items-center gap-2', 
                  store.isFavorite(store.baseCurrency, store.targetCurrency) ? 'btn-lime' : 'btn-outline-secondary']">
-            <!-- Icon Bintang dsb. tidak berubah -->
+            <!-- Icon Bintang tidak berubah -->
             <svg v-if="!store.isFavorite(store.baseCurrency, store.targetCurrency)" width="16" height="16" viewBox="0 0 16 16" fill="none">
               <path d="M13.6372 6.02019C14.2465 6.11394 14.4809 6.86394 14.0356 7.30925L11.5747 9.72331L12.1606 13.1218C12.2544 13.7311 11.5981 14.1999 11.059 13.9186L8.01217 12.3014L4.94186 13.9186C4.40279 14.1999 3.74654 13.7311 3.84029 13.1218L4.42623 9.72331L1.96529 7.30925C1.51998 6.86394 1.75436 6.11394 2.36373 6.02019L5.80904 5.528L7.33248 2.41081C7.61373 1.84831 8.41061 1.87175 8.66842 2.41081L10.2153 5.528L13.6372 6.02019ZM10.3559 9.32488L12.7231 7.028L9.46529 6.55925L8.01217 3.60613L6.53561 6.55925L3.27779 7.028L5.64498 9.32488L5.08248 12.5593L8.01217 11.0358L10.9184 12.5593L10.3559 9.32488Z" fill="currentColor"/>
             </svg>
@@ -196,7 +195,7 @@ const receiveAmount = ref(0)
 const currentRate = ref(0)
 const isLoading = ref(false)
 
-// --- Custom Dropdown States ---
+// Custom Dropdown States
 const showBaseDropdown = ref(false)
 const showTargetDropdown = ref(false)
 const searchBase = ref('')
@@ -213,7 +212,7 @@ const currencyList = computed(() => {
   }))
 })
 
-// --- Computed Filters Base ---
+// Computed Filters Base
 const basePopularFiltered = computed(() => {
   const query = searchBase.value.toLowerCase()
   return currencyList.value.filter(c => 
@@ -229,7 +228,7 @@ const baseOtherFiltered = computed(() => {
   )
 })
 
-// --- Computed Filters Target ---
+// Computed Filters Target
 const targetPopularFiltered = computed(() => {
   const query = searchTarget.value.toLowerCase()
   return currencyList.value.filter(c => 
@@ -245,15 +244,15 @@ const targetOtherFiltered = computed(() => {
   )
 })
 
-// --- Dropdown Functions ---
+// Dropdown Functions
 const toggleBaseDropdown = () => {
   showBaseDropdown.value = !showBaseDropdown.value
-  showTargetDropdown.value = false // tutup yang satunya
+  showTargetDropdown.value = false 
 }
 
 const toggleTargetDropdown = () => {
   showTargetDropdown.value = !showTargetDropdown.value
-  showBaseDropdown.value = false // tutup yang satunya
+  showBaseDropdown.value = false 
 }
 
 const closeAllDropdowns = () => {
@@ -272,12 +271,10 @@ const selectTargetCurrency = (code) => {
   targetCurrency.value = code
   closeAllDropdowns()
 }
-// ----------------------------
 
 const loadCurrencies = async () => {
   try {
     const data = await getCurrencies()
-    // Jika format respons sudah { "USD": "United States Dollar", ... }
     currencies.value = data
   } catch (error) {
     console.error("Gagal memuat mata uang:", error)
@@ -361,7 +358,6 @@ const handleLog = () => {
   margin: 0;
 }
 
-/* 2. Menghilangkan panah (spin buttons) di Firefox */
 .amount-input[type="number"] {
   -moz-appearance: textfield;
 }
@@ -374,7 +370,6 @@ const handleLog = () => {
   cursor: text;
 }
 
-/* === CSS CUSTOM DROPDOWN BENDERA === */
 .currency-dropdown-trigger {
   background-color: #2E2E2E;
   transition: background-color 0.2s;
@@ -389,7 +384,6 @@ const handleLog = () => {
 }
 .currency-code { font-size: 14px; }
 
-/* Posisi absolute relatif terhadap .d-flex pembungkus input & trigger */
 .custom-dropdown-menu {
   position: absolute;
   top: 110%;
@@ -450,7 +444,6 @@ const handleLog = () => {
   height: 100vh;
   z-index: 99;
 }
-/* ================================== */
 
 .btn-swap {
   background-color: #202022;
@@ -497,14 +490,12 @@ const handleLog = () => {
 }
 .rate-info strong { color: #FFFFFF; }
 
-/* Pastikan input saat difokuskan memiliki outline yang jelas */
 .amount-input:focus {
   outline: none;
-  border-bottom: 1px solid #CEF739 !important; /* Efek fokus pada input */
+  border-bottom: 1px solid #CEF739 !important; 
 }
 
-/* Container saat ada elemen di dalamnya yang fokus */
 .input-box:focus-within {
-  border: 1px solid #CEF739; /* Efek fokus pada kotak pembungkus */
+  border: 1px solid #CEF739; 
 }
 </style>

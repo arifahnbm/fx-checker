@@ -19,7 +19,7 @@
       <div v-for="pairKey in store.favorites" :key="pairKey" 
            class="currency-row p-3 mb-2 rounded-3 d-flex justify-content-between align-items-center">
         
-        <!-- Pair Text (Misal: USD -> EUR) -->
+        <!-- Pair Text -->
         <div class="d-flex align-items-center">
           <span class="fw-bold fs-5">{{ formatPair(pairKey) }}</span>
         </div>
@@ -103,9 +103,9 @@ const fetchFavoritesRates = async () => {
         groupedByQuote[item.quote].push(item)
       })
 
-      // Kalkulasi rate terbaru dan selisihnya
+      // Kalkulasi rate dan selisihnya
       for (const quote in groupedByQuote) {
-        // Urutkan array berdasarkan tanggal dari terlama -> terbaru
+        // Urutkan array berdasarkan tanggal dari terlama ke terbaru
         const history = groupedByQuote[quote].sort((a, b) => new Date(a.date) - new Date(b.date))
         
         // Rate terkini adalah item paling akhir di array
@@ -116,8 +116,6 @@ const fetchFavoritesRates = async () => {
         if (history.length > 1) {
           const previousRate = history[history.length - 2].rate
           const changePercent = ((latestRate - previousRate) / previousRate) * 100
-          
-          // Simpan dengan pembulatan 2 desimal
           changesData.value[base][quote] = Number(changePercent.toFixed(2))
         } else {
           changesData.value[base][quote] = 0
@@ -142,8 +140,8 @@ onMounted(() => {
 }
 .currency-row:hover { border: 1px solid #454547; }
 
-.text-green { color: #CEF739; } /* Hijau Lime */
-.text-red { color: #FF4D4D; }   /* Merah untuk rate turun */
+.text-green { color: #CEF739; } 
+.text-red { color: #FF4D4D; }  
 
 .btn-star {
   width: 40px; height: 40px;

@@ -8,13 +8,11 @@
     <!-- Ticker Pasar Berjalan -->
     <LiveTicker />
 
-    <!-- Wadah Konten Utama (Converter + Tabs + History) -->
+    <!-- Wadah Konten Utama  -->
     <div class="container py-4">
       
-      <!-- Panggil ConverterCard di sini -->
       <ConverterCard />
       
-      <!-- Panggil TabNavigation di sini -->
       <TabNavigation />
       
       <!-- HANYA TAMPILKAN KOMPONEN BERDASARKAN activeTab -->
