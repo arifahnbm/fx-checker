@@ -1,5 +1,5 @@
 // Base URL Frankfurter API
-const BASE_URL = '/api'; // Menggunakan proxy Vite untuk menghindari masalah CORS
+const BASE_URL = 'https://api.frankfurter.app'; 
 
 /**
  * Mengambil daftar semua mata uang yang tersedia
