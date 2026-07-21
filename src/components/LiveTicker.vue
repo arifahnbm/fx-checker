@@ -135,7 +135,7 @@ onMounted(() => {
 .ticker-track {
   white-space: nowrap;
   display: inline-flex;
-  animation: marquee 25s linear infinite; /
+  animation: marquee 25s linear infinite; 
 }
 
 /* Fitur Interaktif: Berhenti berjalan saat disorot mouse */
